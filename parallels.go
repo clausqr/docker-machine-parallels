@@ -140,8 +140,11 @@ func (d *Driver) Create() error {
 
 	// Disable Time Sync feature because it has an issue with timezones.
 	// TODO: Turn it back as soon as Time Sync is fixed in Parallels Tools
-	if err := prlctl("set", d.MachineName, "--time-sync", "off"); err != nil {
-		return err
+	// only for 11.x, 10.x doesn't have this option.
+	if ver >=11 {
+		if err := prlctl("set", d.MachineName, "--time-sync", "off"); err != nil {
+			return err
+		}
 	}
 
 	if ver >= 11 {
